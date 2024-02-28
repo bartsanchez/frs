@@ -1,0 +1,5 @@
+version: '3'
+services:
+    frs:
+        volumes:
+            - ./frs:/opt/app/frs/
