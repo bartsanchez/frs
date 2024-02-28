@@ -1,0 +1,8 @@
+version: '3'
+services:
+    test:
+        build: tests/
+        depends_on:
+            - frs
+        links:
+            - frs

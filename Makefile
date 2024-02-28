@@ -29,3 +29,6 @@ tests:
 	make start
 	${COMPOSE_EXEC} -f docker-compose.yml -f docker-compose.$(ENV).yml run --rm frs python manage.py test
 	make stop
+
+integration_tests:
+	scripts/run_integration_tests.sh
