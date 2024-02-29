@@ -5,3 +5,16 @@ services:
         restart: always
         ports:
           - 8000:8000
+        depends_on:
+          - redis_semaphore
+          - redis_cache
+        links:
+          - redis_cache
+
+    redis_semaphore:
+        image: redis:7.2.3
+        restart: always
+
+    redis_cache:
+        image: redis:7.2.3
+        restart: always
