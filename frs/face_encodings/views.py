@@ -26,13 +26,13 @@ async def generate_face_encoding(request):
             face_encodings = await generate_face_encodings(uploaded_file)
             cache.set(key=file_hash, value=face_encodings)
 
-        if not face_encodings:
-            return JsonResponse(status=422, data={"message": "No faces found!"})
+    if not face_encodings:
+        return JsonResponse(status=422, data={"message": "No faces found!"})
 
-        message = await generate_message(len(face_encodings))
+    message = await generate_message(len(face_encodings))
 
-        response = {"message": message, "face_encoding": list(face_encodings[0])}
-        return JsonResponse(response)
+    response = {"message": message, "face_encoding": list(face_encodings[0])}
+    return JsonResponse(response)
 
 
 async def get_file_hash(file_content):
