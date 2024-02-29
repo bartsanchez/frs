@@ -19,7 +19,11 @@ async def generate_face_encoding(request):
         return JsonResponse(status=422, data={"message": "No faces found!"})
 
     # Just get the first face
+    number_of_faces = len(face_encodings)
     face_encoding = face_encodings[0]
 
-    response = {"message": "OK", "face_encoding": list(face_encoding)}
+    message = "OK"
+    if number_of_faces > 1:
+        message += " - Multiple faces. Returning first"
+    response = {"message": message, "face_encoding": list(face_encoding)}
     return JsonResponse(response)

@@ -4,7 +4,10 @@ from django.conf import settings
 from django.test import TestCase
 from django.urls import reverse
 
-from .samples.expected_values import SCHUMACHER_003_FACE_ENCODING
+from .samples.expected_values import (
+    MOORE_001_FACE_ENCODING,
+    SCHUMACHER_003_FACE_ENCODING,
+)
 
 
 class GenerateFaceEncodingViewTests(TestCase):
@@ -34,6 +37,19 @@ class GenerateFaceEncodingViewTests(TestCase):
             )
         self.assertEqual(response.status_code, 422)
         self.assertEqual(response.json()["message"], "No faces found!")
+
+    def test_generate_face_encoding_POST__multiple_faces(self):
+        with Path(f"{self.images_path}/Julianne_Moore_0001.jpg").open("rb") as f:
+            response = self.client.post(
+                self.url,
+                data={"upload_file": f},
+            )
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(
+            response.json()["message"],
+            "OK - Multiple faces. Returning first",
+        )
+        self.assertEqual(response.json()["face_encoding"], MOORE_001_FACE_ENCODING)
 
     def test_generate_face_encoding_POST__no_file(self):
         response = self.client.post(
