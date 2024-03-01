@@ -29,7 +29,7 @@ def test_sample_schumacher_face_encoding():
 
 
 def test_one_processed_images_later():
-    time.sleep(5)
+    time.sleep(3)
     r = requests.get(STATS_URL, timeout=5)
 
     assert r.status_code == requests.codes.ok
@@ -52,7 +52,7 @@ def test_get_schumacher_face_encoding():
 
 
 def test_still_one_processed_images():
-    time.sleep(5)
+    time.sleep(3)
     r = requests.get(STATS_URL, timeout=5)
 
     assert r.status_code == requests.codes.ok
