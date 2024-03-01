@@ -26,3 +26,19 @@ Unit tests:
 ```sh
 make tests
 ```
+
+## Manual testing
+
+Note: Run the server as in the "Usage" section first.
+
+Get face encoding for one image (replace /path/to/frs with the path of this repository in your system):
+
+```sh
+curl -w "%{http_code}" -X POST -F "upload_file=@/path/to/frs/frs/face_encodings/tests/samples/Michael_Schumacher_0003.jpg" http://localhost:8000/generate_face_encoding
+```
+
+Check number of processed images:
+
+```sh
+curl -w "%{http_code}" http://localhost:8000/stats
+```
