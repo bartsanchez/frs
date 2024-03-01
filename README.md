@@ -55,5 +55,5 @@ curl -w "%{http_code}" http://localhost:8000/face_encoding/9300d3c14e83f9dca75e1
 Check number of processed images:
 
 ```sh
-curl -w "%{http_code}" http://localhost:8000/stats
+curl -w "%{http_code}" http://localhost:8000/stats/
 ```
