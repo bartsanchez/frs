@@ -94,5 +94,8 @@ async def store_instances(file_hash, face_encoding):
     await image.insert_face_encoding(face_encoding)
 
     # Move to a Celery task as a background task
-    average_face_encoding = await AverageFaceEncoding.objects.afirst()
-    await sync_to_async(average_face_encoding.update_average_face_encodings)(image)
+    # Using global lock for avoding race conditions
+    r = redis.Redis(host="redis_semaphore")
+    with r.lock("global_lock"):
+        average_face_encoding = await AverageFaceEncoding.objects.afirst()
+        await sync_to_async(average_face_encoding.update_average_face_encodings)(image)
