@@ -4,6 +4,7 @@
 
 - [docker](https://www.docker.com/)
 - [docker-compose](https://docs.docker.com/compose/)
+- Port 8000 of the server running this project not occupied.
 
 ## General description
 
