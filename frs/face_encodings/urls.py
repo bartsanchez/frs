@@ -8,4 +8,9 @@ urlpatterns = [
         views.generate_face_encoding,
         name="generate_face_encoding",
     ),
+    path(
+        "stats",
+        views.stats,
+        name="stats",
+    ),
 ]

@@ -4,6 +4,8 @@ from django.conf import settings
 from django.test import TestCase
 from django.urls import reverse
 
+from face_encodings import models
+
 from .samples.expected_values import (
     MOORE_001_FACE_ENCODING,
     SCHUMACHER_003_FACE_ENCODING,
@@ -58,3 +60,29 @@ class GenerateFaceEncodingViewTests(TestCase):
         )
         self.assertEqual(response.status_code, 422)
         self.assertEqual(response.json()["message"], "No image sent!")
+
+
+class StatsViewTests(TestCase):
+    def setUp(self):
+        self.url = reverse("stats")
+        self.gfe_url = reverse("generate_face_encoding")
+        self.images_path = f"{settings.BASE_DIR}/face_encodings/tests/samples"
+
+    def test_generate_face_encoding_GET(self):
+        response = self.client.get(self.url)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()["number_of_images_processed"], 0)
+
+    def test_generate_face_encoding__two_images(self):
+        image_face_encoding = models.ImageFaceEncoding(
+            file_hash="foo",
+        )
+        image_face_encoding.save()
+        another_image_face_encoding = models.ImageFaceEncoding(
+            file_hash="bar",
+        )
+        another_image_face_encoding.save()
+
+        response = self.client.get(self.url)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()["number_of_images_processed"], 2)
