@@ -3,6 +3,6 @@ services:
     test:
         build: tests/
         depends_on:
-            - frs
+            - load-balancer
         links:
-            - frs
+            - load-balancer

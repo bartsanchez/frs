@@ -18,19 +18,59 @@ services:
         links:
             - db
 
-    frs:
+    load-balancer:
+        image: nginx:1.25.4
+        restart: always
+        ports:
+          - 8000:80
+        volumes:
+          - ./nginx.conf:/etc/nginx/conf.d/default.conf:ro
+
+    frs-app1:
         build: .
         restart: always
         environment:
             DATABASE_URL: postgres://fake_db_user:fake_db_password@db:5432/db
-        ports:
-          - 8000:8000
         depends_on:
+          - load-balancer
           - db
           - run_migrations
           - redis_semaphore
           - redis_cache
         links:
+          - load-balancer
+          - db
+          - redis_cache
+
+    frs-app2:
+        build: .
+        restart: always
+        environment:
+            DATABASE_URL: postgres://fake_db_user:fake_db_password@db:5432/db
+        depends_on:
+          - load-balancer
+          - db
+          - run_migrations
+          - redis_semaphore
+          - redis_cache
+        links:
+          - load-balancer
+          - db
+          - redis_cache
+
+    frs-app3:
+        build: .
+        restart: always
+        environment:
+            DATABASE_URL: postgres://fake_db_user:fake_db_password@db:5432/db
+        depends_on:
+          - load-balancer
+          - db
+          - run_migrations
+          - redis_semaphore
+          - redis_cache
+        links:
+          - load-balancer
           - db
           - redis_cache
 

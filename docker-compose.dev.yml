@@ -1,5 +1,11 @@
 version: '3'
 services:
-    frs:
+    frs-app1:
+        volumes:
+            - ./frs:/opt/app/frs/
+    frs-app2:
+        volumes:
+            - ./frs:/opt/app/frs/
+    frs-app3:
         volumes:
             - ./frs:/opt/app/frs/

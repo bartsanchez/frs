@@ -7,7 +7,7 @@ export ENV=test
 
 # Prepare system
 make build
-make start START_SERVICES="frs"
+make start START_SERVICES="frs-app1 frs-app2 frs-app3"
 sleep 10
 
 # Run tests

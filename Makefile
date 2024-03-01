@@ -27,7 +27,7 @@ ps:
 tests:
 	make build
 	make start
-	${COMPOSE_EXEC} -f docker-compose.yml -f docker-compose.$(ENV).yml run --rm frs python manage.py test
+	${COMPOSE_EXEC} -f docker-compose.yml -f docker-compose.$(ENV).yml run --rm frs-app1 python manage.py test
 	make stop
 
 integration_tests:

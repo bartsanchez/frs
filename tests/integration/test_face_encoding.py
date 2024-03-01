@@ -10,7 +10,7 @@ from .samples.expected_values import (
     SCHUMACHER_003_FACE_ENCODING,
 )
 
-BASE_URL = "http://frs:8000"
+BASE_URL = "http://load-balancer"
 STATS_URL = f"{BASE_URL}/stats"
 FACE_ENCODING_URL = f"{BASE_URL}/face_encoding"
 GFE_URL = f"{BASE_URL}/generate_face_encoding"
