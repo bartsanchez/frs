@@ -32,7 +32,26 @@ async def generate_face_encoding(request):
 
     message = await generate_message(len(face_encodings))
 
-    response = {"message": message, "face_encoding": list(face_encodings[0])}
+    response = {
+        "message": message,
+        "file_hash": file_hash,
+        "face_encoding": list(face_encodings[0]),
+    }
+    return JsonResponse(response)
+
+
+@csrf_exempt
+@require_http_methods(["GET"])
+async def face_encoding(request, file_hash):  # noqa: ARG001
+    face_encodings = await get_existing_face_encodings(file_hash)
+    message = await generate_message(len(face_encodings))
+    if not face_encodings:
+        return JsonResponse(status=422, data={"message": "No face encoding found!"})
+    response = {
+        "message": message,
+        "file_hash": file_hash,
+        "face_encoding": list(face_encodings[0]),
+    }
     return JsonResponse(response)
 
 

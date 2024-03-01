@@ -9,6 +9,11 @@ urlpatterns = [
         name="generate_face_encoding",
     ),
     path(
+        r"face_encoding/<str:file_hash>",
+        views.face_encoding,
+        name="face_encoding",
+    ),
+    path(
         "stats",
         views.stats,
         name="stats",

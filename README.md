@@ -37,6 +37,12 @@ Get face encoding for one image (replace /path/to/frs with the path of this repo
 curl -w "%{http_code}" -X POST -F "upload_file=@/path/to/frs/frs/face_encodings/tests/samples/Michael_Schumacher_0003.jpg" http://localhost:8000/generate_face_encoding
 ```
 
+Get face encoding for an already processed image:
+
+```sh
+curl -w "%{http_code}" http://localhost:8000/face_encoding/9300d3c14e83f9dca75e135363b4a29297a4654f521b321240b0466780c27bed
+```
+
 Check number of processed images:
 
 ```sh
