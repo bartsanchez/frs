@@ -6,7 +6,7 @@ from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
 
-from face_encodings.models import ImageFaceEncoding
+from face_encodings.models import AverageFaceEncoding, ImageFaceEncoding
 from face_encodings.utils import generate_message, get_file_hash
 
 
@@ -58,8 +58,12 @@ async def face_encoding(request, file_hash):  # noqa: ARG001
 @csrf_exempt
 @require_http_methods(["GET"])
 def stats(request):  # noqa: ARG001
-    number_of_images_processed = ImageFaceEncoding.objects.count()
-    return JsonResponse({"number_of_images_processed": number_of_images_processed})
+    average_face_encodings = AverageFaceEncoding.objects.first()
+    data = {
+        "number_of_images_processed": average_face_encodings.number_of_images_processed,
+        "average_face_encodings": average_face_encodings.get_face_encoding(),
+    }
+    return JsonResponse(data)
 
 
 async def get_existing_face_encodings(file_hash):
@@ -88,3 +92,7 @@ async def store_instances(file_hash, face_encoding):
     image = ImageFaceEncoding(file_hash=file_hash)
     await sync_to_async(image.save)()
     await image.insert_face_encoding(face_encoding)
+
+    # Move to a Celery task as a background task
+    average_face_encoding = await AverageFaceEncoding.objects.afirst()
+    await sync_to_async(average_face_encoding.update_average_face_encodings)(image)
