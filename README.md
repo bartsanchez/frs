@@ -5,6 +5,23 @@
 [docker](https://www.docker.com/)
 [docker-compose](https://docs.docker.com/compose/)
 
+## General description
+
+### Services
+- Dockerized app
+- 1 Load Balancer (Nginx)
+- 3 Django apps served by Uvicorn.
+- 1 PostgreSQL db.
+- 1 Redis instance working as a semaphore.
+- 1 Redis instance working as cache.
+
+### API
+
+POST /generate_face_encoding  --> Expects a file to generate encoding. Returns face encoding, in case it exists, and the file_hash to further retrieval.
+GET /face_encoding/<file_hash> --> File hash of an already processed face encoding.
+GET /stats/  --> Returns number of processed images and the average face encoding using the component-wise average of the processed vectors.
+
+
 ## Further Ideas/Improvements
 
 - Use a better way of scaling horizontally, like using Kubernetes.
