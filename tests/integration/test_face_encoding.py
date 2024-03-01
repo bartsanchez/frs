@@ -1,3 +1,4 @@
+import time
 from pathlib import Path
 
 import requests
@@ -27,8 +28,6 @@ def test_sample_schumacher_face_encoding():
 
 
 def test_one_processed_images_later():
-    import time
-
     time.sleep(5)
     r = requests.get(STATS_URL, timeout=5)
 
