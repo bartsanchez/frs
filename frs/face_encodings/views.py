@@ -1,5 +1,3 @@
-import hashlib
-
 import face_recognition
 import redis
 from asgiref.sync import sync_to_async
@@ -9,6 +7,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
 
 from face_encodings.models import ImageFaceEncoding
+from face_encodings.utils import generate_message, get_file_hash
 
 
 @csrf_exempt
@@ -44,10 +43,6 @@ def stats(request):  # noqa: ARG001
     return JsonResponse({"number_of_images_processed": number_of_images_processed})
 
 
-async def get_file_hash(file_content):
-    return hashlib.sha256(file_content).hexdigest()
-
-
 async def get_existing_face_encodings(file_hash):
     face_encodings = cache.get(key=file_hash)
     if face_encodings:
@@ -74,10 +69,3 @@ async def store_instances(file_hash, face_encoding):
     image = ImageFaceEncoding(file_hash=file_hash)
     await sync_to_async(image.save)()
     await image.insert_face_encoding(face_encoding)
-
-
-async def generate_message(number_of_faces):
-    message = "OK"
-    if number_of_faces > 1:
-        message += " - Multiple faces. Returning first"
-    return message
