@@ -16,6 +16,10 @@ class ImageFaceEncoding(models.Model):
         super().save(*args, **kwargs)
         self.full_clean()
 
+    async def get_face_encoding(self):
+        face_encoding_values = self.faceencodingvalue_set.order_by("index")
+        return [[fev.value async for fev in face_encoding_values]]
+
 
 class FaceEncodingValue(models.Model):
     image = models.ForeignKey(ImageFaceEncoding, on_delete=models.CASCADE)

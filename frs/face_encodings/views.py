@@ -7,6 +7,8 @@ from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
 
+from face_encodings.models import ImageFaceEncoding
+
 
 @csrf_exempt
 @require_http_methods(["POST"])
@@ -21,7 +23,7 @@ async def generate_face_encoding(request):
     # processing an image twice due to race conditions.
     r = redis.Redis(host="redis_semaphore")
     with r.lock(file_hash):
-        face_encodings = cache.get(key=file_hash)
+        face_encodings = await get_existing_face_encodings(file_hash)
         if not face_encodings:
             face_encodings = await generate_face_encodings(uploaded_file)
             cache.set(key=file_hash, value=face_encodings)
@@ -37,6 +39,19 @@ async def generate_face_encoding(request):
 
 async def get_file_hash(file_content):
     return hashlib.sha256(file_content).hexdigest()
+
+
+async def get_existing_face_encodings(file_hash):
+    face_encodings = cache.get(key=file_hash)
+    if face_encodings:
+        return face_encodings
+
+    image_face_encoding_query = ImageFaceEncoding.objects.filter(file_hash=file_hash)
+    if await image_face_encoding_query.aexists():
+        image_face_encoding = await image_face_encoding_query.aget()
+        return await image_face_encoding.get_face_encoding()
+
+    return []
 
 
 async def generate_face_encodings(uploaded_file):
