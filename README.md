@@ -17,10 +17,11 @@
 
 ### API
 
-POST /generate_face_encoding  --> Expects a file to generate encoding. Returns face encoding, in case it exists, and the file_hash to further retrieval.
-GET /face_encoding/<file_hash> --> File hash of an already processed face encoding.
-GET /stats/  --> Returns number of processed images and the average face encoding using the component-wise average of the processed vectors.
-
+```
+POST | /generate_face_encoding    | --> Expects a file to generate encoding. Returns face encoding, in case it exists, and the file_hash to further retrieval.
+GET  | /face_encoding/<file_hash> | --> File hash of an already processed face encoding.
+GET  | /stats/                    | --> Returns number of processed images and the average face encoding using the component-wise average of the processed vectors.
+```
 
 ## Further Ideas/Improvements
 
@@ -56,6 +57,11 @@ make tests
 ## Manual testing
 
 Note: Run the server as in the "Usage" section first.
+
+Note2: You can see that the load balancer is working correctly with:
+```sh
+ARGS="-f" make logs
+```
 
 Get face encoding for one image (replace /path/to/frs with the path of this repository in your system):
 
