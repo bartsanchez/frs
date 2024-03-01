@@ -5,6 +5,15 @@
 [docker](https://www.docker.com/)
 [docker-compose](https://docs.docker.com/compose/)
 
+## Further Ideas/Improvements
+
+- Use a better way of scaling horizontally, like using Kubernetes.
+- The calculated values could be distributed among a sharded database.
+- The usage of a CDN and some cache in the load balancer could help accelerating some GET requests.
+- Proper retry policy for semaphore handling (when Redis is down).
+- Use async tasks in background for average calculation.
+- Use a better way of aggregating data, instead of relying on summing on top of each value every time.
+
 ## Usage
 
 Ensure the app is not running:
