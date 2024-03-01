@@ -54,6 +54,12 @@ Unit tests:
 make tests
 ```
 
+Integration tests:
+
+```sh
+make integration_tests
+```
+
 ## Manual testing
 
 Note: Run the server as in the "Usage" section first.
