@@ -2,8 +2,8 @@
 
 ## Requirements
 
-[docker](https://www.docker.com/)
-[docker-compose](https://docs.docker.com/compose/)
+- [docker](https://www.docker.com/)
+- [docker-compose](https://docs.docker.com/compose/)
 
 ## General description
 
