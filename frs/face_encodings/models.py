@@ -75,7 +75,7 @@ class AverageFaceEncoding(models.Model):
             ],
         ]
 
-    # transaction
+    @transaction.atomic
     def update_average_face_encodings(self, image_face_encoding):
         self.number_of_images_processed += 1
         self.save()
