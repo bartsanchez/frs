@@ -13,9 +13,4 @@ urlpatterns = [
         views.face_encoding,
         name="face_encoding",
     ),
-    path(
-        "stats",
-        views.stats,
-        name="stats",
-    ),
 ]

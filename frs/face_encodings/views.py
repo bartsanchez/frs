@@ -5,8 +5,9 @@ from django.core.cache import cache
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
+from stats.models import AverageFaceEncoding
 
-from face_encodings.models import AverageFaceEncoding, ImageFaceEncoding
+from face_encodings.models import ImageFaceEncoding
 from face_encodings.utils import generate_message, get_file_hash
 
 
@@ -53,17 +54,6 @@ async def face_encoding(request, file_hash):  # noqa: ARG001
         "face_encoding": list(face_encodings[0]),
     }
     return JsonResponse(response)
-
-
-@csrf_exempt
-@require_http_methods(["GET"])
-def stats(request):  # noqa: ARG001
-    average_face_encodings = AverageFaceEncoding.objects.first()
-    data = {
-        "number_of_images_processed": average_face_encodings.number_of_images_processed,
-        "average_face_encodings": average_face_encodings.get_face_encoding(),
-    }
-    return JsonResponse(data)
 
 
 async def get_existing_face_encodings(file_hash):
