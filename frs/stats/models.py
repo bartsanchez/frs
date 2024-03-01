@@ -13,7 +13,7 @@ class AverageFaceEncoding(models.Model):
     def get_face_encoding(self):
         face_encoding_values = self.averagefaceencodingvalue_set.order_by("index")
         if self.number_of_images_processed == 0:
-            return list(range(128))
+            return [[0] * 128]
         return [
             [
                 float(

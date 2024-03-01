@@ -65,3 +65,9 @@ class StatsViewTests(TestCase):
             self.assertTrue(
                 abs(diff_value) < decimal.Decimal("0000000000000000000000000000.1"),
             )
+
+    def test_calculate_average_face_encodings__empty(self):
+        response = self.client.get(self.url)
+        self.assertEqual(response.status_code, 200)
+        average_face_encodings = response.json()["average_face_encodings"]
+        self.assertEqual(average_face_encodings, [[0 for i in range(128)]])
