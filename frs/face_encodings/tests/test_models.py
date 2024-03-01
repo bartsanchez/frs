@@ -1,7 +1,10 @@
+from asgiref.sync import sync_to_async
 from django.core.exceptions import ValidationError
 from django.test import TestCase
 
 from face_encodings import models
+
+from .samples.expected_values import SCHUMACHER_003_FACE_ENCODING
 
 
 class ImageFaceEncodingTests(TestCase):
@@ -16,6 +19,23 @@ class ImageFaceEncodingTests(TestCase):
         image_face_encoding = models.ImageFaceEncoding.objects.get()
         self.assertEqual(image_face_encoding.file_hash, "foo")
         self.assertEqual(str(image_face_encoding), "ImageFaceEncoding(file_hash=foo)")
+
+
+class FaceEncodingGetAndInsertTests(TestCase):
+    async def test_get_and_insert_face_encoding(self):
+        fev_instances = await sync_to_async(models.FaceEncodingValue.objects.count)()
+        self.assertEqual(fev_instances, 0)
+
+        image_face_encoding = models.ImageFaceEncoding(file_hash="foo")
+        await sync_to_async(image_face_encoding.save)()
+
+        await image_face_encoding.insert_face_encoding(SCHUMACHER_003_FACE_ENCODING)
+
+        fev_instances = await sync_to_async(models.FaceEncodingValue.objects.count)()
+        self.assertEqual(fev_instances, 128)
+
+        face_encoding = await image_face_encoding.get_face_encoding()
+        self.assertEqual(face_encoding, [SCHUMACHER_003_FACE_ENCODING])
 
 
 class FaceEncodingValueTests(TestCase):

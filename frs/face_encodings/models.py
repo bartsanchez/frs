@@ -1,5 +1,6 @@
 import decimal
 
+from asgiref.sync import sync_to_async
 from django.core.exceptions import ValidationError
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models, transaction
@@ -18,7 +19,15 @@ class ImageFaceEncoding(models.Model):
 
     async def get_face_encoding(self):
         face_encoding_values = self.faceencodingvalue_set.order_by("index")
-        return [[fev.value async for fev in face_encoding_values]]
+        return [
+            [float(decimal.Decimal(fev.value)) async for fev in face_encoding_values],
+        ]
+
+    async def insert_face_encoding(self, face_encoding):
+        for i, value in enumerate(face_encoding):
+            fev = FaceEncodingValue(image=self, index=i, value=value)
+            await sync_to_async(fev.save)()
+        return await sync_to_async(self.faceencodingvalue_set.count)()
 
 
 class FaceEncodingValue(models.Model):

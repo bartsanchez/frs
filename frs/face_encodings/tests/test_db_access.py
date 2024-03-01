@@ -1,3 +1,4 @@
+import decimal
 from pathlib import Path
 from unittest import mock
 
@@ -32,7 +33,7 @@ class DBAccessForExistingDataTests(TestCase):
         self.assertEqual(first_response.json()["message"], "OK")
         self.assertEqual(
             first_response.json()["face_encoding"],
-            [str(i) for i in range(128)],
+            [float(decimal.Decimal(i)) for i in range(128)],
         )
 
         cache_get_mock.assert_called_once()
