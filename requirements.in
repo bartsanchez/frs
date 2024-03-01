@@ -2,3 +2,4 @@ django
 redis
 dj-database-url
 psycopg[binary]
+uvicorn

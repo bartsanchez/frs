@@ -8,12 +8,16 @@ asgiref==3.7.2
     # via django
 async-timeout==4.0.3
     # via redis
+click==8.1.7
+    # via uvicorn
 dj-database-url==2.1.0
     # via -r requirements.in
 django==5.0.2
     # via
     #   -r requirements.in
     #   dj-database-url
+h11==0.14.0
+    # via uvicorn
 psycopg[binary]==3.1.18
     # via -r requirements.in
 psycopg-binary==3.1.18
@@ -26,3 +30,5 @@ typing-extensions==4.10.0
     # via
     #   dj-database-url
     #   psycopg
+uvicorn==0.27.1
+    # via -r requirements.in
