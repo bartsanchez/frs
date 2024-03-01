@@ -25,8 +25,7 @@ async def generate_face_encoding(request):
     with r.lock(file_hash):
         face_encodings = await get_existing_face_encodings(file_hash)
         if not face_encodings:
-            face_encodings = await generate_face_encodings(uploaded_file)
-            cache.set(key=file_hash, value=face_encodings)
+            face_encodings = await generate_face_encodings(file_hash, uploaded_file)
 
     if not face_encodings:
         return JsonResponse(status=422, data={"message": "No faces found!"})
@@ -54,9 +53,11 @@ async def get_existing_face_encodings(file_hash):
     return []
 
 
-async def generate_face_encodings(uploaded_file):
+async def generate_face_encodings(file_hash, uploaded_file):
     file_image = face_recognition.load_image_file(uploaded_file.file)
-    return face_recognition.face_encodings(file_image)
+    face_encodings = face_recognition.face_encodings(file_image)
+    cache.set(key=file_hash, value=face_encodings)
+    return face_encodings
 
 
 async def generate_message(number_of_faces):
